@@ -43,7 +43,7 @@ export function ContactForm() {
     const result = contactFormSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: FormErrors = {};
-      result.error.errors.forEach((err) => {
+      result.error.issues.forEach((err) => {
         const field = err.path[0] as keyof FormErrors;
         fieldErrors[field] = err.message;
       });
