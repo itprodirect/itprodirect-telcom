@@ -1,4 +1,4 @@
-import { ContactFormData, OrderData } from "./validation";
+import { ContactFormData, OrderRequestData } from "./validation";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -19,10 +19,6 @@ interface OrderResponse {
   success: boolean;
   orderId: string;
   message: string;
-  paymentInstructions: {
-    method: string;
-    details: string;
-  };
 }
 
 /**
@@ -78,10 +74,12 @@ export async function submitContactForm(
 }
 
 /**
- * Submit order to AWS Lambda via API Gateway
+ * Submit order request to AWS Lambda via API Gateway
+ * This is a simplified "order request" - no payment processing
+ * Owner will contact customer to arrange pickup/shipping and payment
  */
-export async function submitOrder(
-  data: OrderData
+export async function submitOrderRequest(
+  data: OrderRequestData
 ): Promise<ApiResponse<OrderResponse>> {
   // If no API URL configured, return mock success for development
   if (!API_URL) {
@@ -89,15 +87,11 @@ export async function submitOrder(
     const mockOrderId = `ORD-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     return {
       success: true,
-      message: "Order received! Check your email for payment instructions.",
+      message: "Order request received! We'll contact you to confirm details and payment.",
       data: {
         success: true,
         orderId: mockOrderId,
-        message: "Order received! Check your email for payment instructions.",
-        paymentInstructions: {
-          method: data.payment.method,
-          details: `Mock payment instructions for ${data.payment.method}. Configure NEXT_PUBLIC_API_URL for real submissions.`,
-        },
+        message: "Order request received! We'll contact you to confirm details and payment.",
       },
     };
   }
@@ -116,7 +110,7 @@ export async function submitOrder(
     if (!response.ok) {
       return {
         success: false,
-        error: result.error || "Failed to process order",
+        error: result.error || "Failed to submit order request",
         details: result.details,
       };
     }
@@ -127,7 +121,7 @@ export async function submitOrder(
       data: result,
     };
   } catch (error) {
-    console.error("Order submission error:", error);
+    console.error("Order request submission error:", error);
     return {
       success: false,
       error: "Network error. Please try again or contact us directly.",

@@ -120,16 +120,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="mt-1 text-sm text-gray-600 dark:text-slate-400">{product.conditionNotes}</p>
           </div>
 
-          {/* Contact CTA */}
+          {/* Order CTA */}
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Link href="/contact" className="flex-1">
+            <Link href={`/checkout?sku=${product.sku}`} className="flex-1">
               <Button size="lg" className="w-full">
-                Contact to Order
+                Request to Order
               </Button>
             </Link>
-            <Link href="/products" className="flex-1">
+            <Link href="/contact" className="flex-1">
               <Button size="lg" variant="outline" className="w-full">
-                Back to Products
+                Ask a Question
               </Button>
             </Link>
           </div>
