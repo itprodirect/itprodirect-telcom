@@ -1,35 +1,35 @@
 # External Requirements - Items Nick Needs to Provide
 
-> **Last Updated:** January 20, 2026  
+> **Last Updated:** January 22, 2026
 > These are items that Claude Code cannot create and must be provided by you.
 
 ---
 
-## Priority 1: Required Before Development
+## Already Complete
 
-### AWS Credentials
-- [ ] **AWS Account Access**
-  - Either AWS Console access OR
-  - AWS CLI configured with credentials
-  - Needed for: Lambda, API Gateway, SES setup
-  
-### Email Verification
-- [ ] **Verify nick@itprodirect.com in AWS SES**
-  - Required before email sending will work
-  - AWS sends verification email, click the link
+### AWS Setup
+- [x] **AWS Account configured**
+- [x] **Lambda functions deployed** (itprodirect-contact, itprodirect-orders)
+- [x] **API Gateway HTTP API created** with CORS enabled
+- [x] **SES email verified** (nick@itprodirect.com)
 
----
-
-## Priority 2: Required Before Testing
-
-### Environment Variables
-- [ ] **AWS API Gateway URL** (after creating API)
-  - Format: `https://XXXXXX.execute-api.us-east-1.amazonaws.com/prod`
-  - Goes in `.env.local` file
+### Vercel Setup
+- [x] **Vercel account connected to GitHub**
+- [x] **Auto-deploy working**
 
 ---
 
-## Priority 3: Required Before Go-Live
+## Required Before Order Flow Testing
+
+### Environment Variable
+- [ ] **Set NEXT_PUBLIC_API_URL in Vercel dashboard**
+  - Go to Vercel → Project Settings → Environment Variables
+  - Add: `NEXT_PUBLIC_API_URL` = `https://YOUR-API-ID.execute-api.us-east-1.amazonaws.com`
+  - Redeploy after adding
+
+---
+
+## Required Before Go-Live
 
 ### Product Images
 
@@ -37,101 +37,64 @@
 
 1. **Main product shot** (required for each product)
    - Clean background (white/neutral preferred)
-   - Good lighting (natural light or well-lit room)
-   - Product fills ~70% of frame
+   - Good lighting
    - Resolution: 1200x1200px minimum (square crop works best)
    - File format: JPG or PNG
 
-2. **Detail shots** (optional but recommended)
-   - Ports/connectors closeup
-   - Labels/model numbers visible
-   - Condition details (if any wear)
-   - Include something for scale if helpful
-
-3. **For NEW/SEALED items**
-   - Photo of sealed box/packaging
-   - Shows "unopened" status clearly
-
-4. **File naming convention:**
+2. **File naming:**
    ```
    public/images/products/[sku-folder]/
    ├── main.jpg       # Primary image
-   ├── side.jpg       # Side view
-   ├── ports.jpg      # Ports/connectors
-   ├── box.jpg        # Packaging (if applicable)
-   └── detail-1.jpg   # Additional details
+   ├── side.jpg       # Side view (optional)
+   └── detail.jpg     # Details (optional)
    ```
 
 **Products needing images:**
 
-| SKU | Product | Suggested Shots |
-|-----|---------|-----------------|
-| RocketM5-US | Ubiquiti RocketM5 | main, ports, multiple-units |
-| RP-5AC-Gen2-US | Rocket Prism 5AC Gen2 | main, detail |
-| AM-5G20-90 | airMAX Sector Antenna | main, mounting-bracket, size-reference |
-| PBE-5AC-Gen2-US | PowerBeam AC Gen2 | main, sealed-box |
-| MA-INJ-4 | Meraki PoE Injector | main |
-
-### Payment Information
-
-For the checkout confirmation emails, you'll need to provide:
-
-- [ ] **Wire Transfer Details**
-  ```
-  Bank Name: [Your Bank]
-  Routing Number: [XXXXXXXXX]
-  Account Number: [XXXXXXXXX]
-  Account Name: [IT Pro Direct / Your Name]
-  ```
-
-- [ ] **ACH Details** (usually same as wire, confirm with bank)
-
-- [ ] **PayPal Email**
-  - Confirm: nick@itprodirect.com for receiving PayPal payments
-  - Or different PayPal email if preferred
+| SKU | Product | Priority |
+|-----|---------|----------|
+| RocketM5-US | Ubiquiti RocketM5 | High (featured) |
+| RP-5AC-Gen2-US | Rocket Prism 5AC Gen2 | High (featured) |
+| AM-5G20-90 | airMAX Sector Antenna | Medium |
+| PBE-5AC-Gen2-US | PowerBeam AC Gen2 | High (featured) |
+| MA-INJ-4 | Meraki PoE Injector | Low |
 
 ### Final Inventory Count
 
-Before go-live, verify actual quantities:
+Before go-live, verify actual quantities match products.json:
 
-| Product | Listed Qty | Actual Qty | Notes |
-|---------|------------|------------|-------|
-| RocketM5-US | 20 | ___ | |
-| RP-5AC-Gen2-US | 20 | ___ | |
-| AM-5G20-90 | 18 | ___ | |
-| PBE-5AC-Gen2-US | 2 | ___ | |
-| MA-INJ-4 | 15 | ___ | |
+| Product | Listed Qty | Actual Qty |
+|---------|------------|------------|
+| RocketM5-US | 20 | ___ |
+| RP-5AC-Gen2-US | 20 | ___ |
+| AM-5G20-90 | 18 | ___ |
+| PBE-5AC-Gen2-US | 2 | ___ |
+| MA-INJ-4 | 15 | ___ |
 
 ---
 
-## Priority 4: Optional / Nice-to-Have
+## Optional / Nice-to-Have
 
 ### Google Analytics
-- [ ] **GA4 Property ID** (if you want analytics)
-  - Format: `G-XXXXXXXXXX`
+- [ ] **GA4 Property ID** (format: `G-XXXXXXXXXX`)
   - Create at analytics.google.com
+  - Add to Vercel env vars as `NEXT_PUBLIC_GA_ID`
 
-### Custom Domain (Future)
-- [ ] **Domain name** if you want something other than Vercel subdomain
-  - Could use subdomain of itprodirect.com (e.g., `gear.itprodirect.com`)
+### Custom Domain
+- [ ] **Domain name** (future enhancement)
+  - Could use subdomain of itprodirect.com
   - Or register new domain
-
-### Social/Marketing
-- [ ] **Social media links** (if you want in footer)
-- [ ] **Logo file** (if IT Pro Direct has one)
 
 ---
 
 ## Quick Checklist
 
-Copy this to track your progress:
-
 ```
-[ ] AWS account ready
-[ ] SES email verified
-[ ] API Gateway URL obtained
-[ ] Wire transfer details ready
-[ ] PayPal email confirmed
+[x] AWS Lambda functions working
+[x] API Gateway working
+[x] SES email verified
+[x] Vercel connected
+[ ] NEXT_PUBLIC_API_URL set in Vercel
 [ ] Product photos taken:
     [ ] RocketM5
     [ ] Rocket Prism
@@ -145,8 +108,8 @@ Copy this to track your progress:
 
 ## Notes
 
-- **Images can be added after initial deployment** - the site will show placeholders until you add real images
-- **Payment details can be updated in Lambda code** after initial deployment
-- **Inventory counts can be updated in products.json** anytime
+- **Images can be added incrementally** - site works with placeholders
+- **Inventory counts can be updated** in `data/products.json` anytime
+- **Payment info not needed on website** - handled offline after customer contact
 
-The site can go live with placeholders and be updated incrementally!
+The site can go live with placeholders and be updated over time!

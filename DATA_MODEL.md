@@ -1,6 +1,6 @@
 # Data Model - IT Pro Direct Telecom Equipment
 
-> **Last Updated:** January 20, 2026
+> **Last Updated:** January 22, 2026
 
 ---
 
@@ -43,65 +43,38 @@ export interface Product {
   featured: boolean;
   active: boolean;
 }
-
-export interface CartItem {
-  sku: string;
-  name: string;
-  quantity: number;
-  unitPrice: number;
-  lineTotal: number;
-}
-
-export interface Cart {
-  items: CartItem[];
-  subtotal: number;
-  paypalFee: number;
-  shippingCost: number;
-  total: number;
-}
 ```
 
-### Order Types
+### Order Request Types (Simplified)
 
 ```typescript
 // types/order.ts
 
 export interface CustomerInfo {
   name: string;
-  email: string;
-  phone: string;
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
+  email?: string;  // Optional but recommended
+  phone: string;   // Required for order requests
 }
 
 export interface OrderItem {
   sku: string;
   name: string;
-  quantity: number;
-  unitPrice: number;
-  lineTotal: number;
+  qty: number;  // Simplified - just quantity, no pricing
 }
 
-export interface Order {
-  orderId?: string;
+export interface OrderRequest {
   customer: CustomerInfo;
   items: OrderItem[];
-  shipping: {
-    method: "pickup" | "ship";
-    cost: number;
-  };
-  payment: {
-    method: "wire" | "ach" | "paypal";
-    subtotal: number;
-    paypalFee: number;
-    total: number;
+  fulfillment: {
+    method: "pickup" | "ship";  // Default: pickup
   };
   notes?: string;
-  createdAt?: string;
+}
+
+export interface OrderResponse {
+  success: boolean;
+  orderId?: string;
+  message: string;
 }
 ```
 
@@ -183,306 +156,29 @@ export interface ContactForm {
       },
       "featured": true,
       "active": true
-    },
-    {
-      "sku": "RP-5AC-Gen2-US",
-      "brand": "Ubiquiti",
-      "model": "Rocket Prism 5AC Gen2",
-      "name": "Ubiquiti Rocket Prism 5AC Gen2",
-      "category": "radio",
-      "shortDescription": "Improves performance in noisy RF environments. Tested + reset.",
-      "longDescription": "The RP-5AC-Gen2-US is designed to reduce interference and improve throughput/latency in high-noise deployments. Features active RF filtering technology. All units are tested and factory reset, ready for integration into supported airMAX builds. Great for WISPs operating in congested spectrum.",
-      "condition": "tested-working",
-      "conditionNotes": "Tested working, factory reset. Older stock but fully functional.",
-      "quantity": 20,
-      "pricing": [
-        {
-          "tier": "single",
-          "minQty": 1,
-          "maxQty": 4,
-          "pricePerUnit": 179,
-          "discountPercent": 0
-        },
-        {
-          "tier": "bulk5",
-          "minQty": 5,
-          "maxQty": 9,
-          "pricePerUnit": 161,
-          "discountPercent": 10
-        },
-        {
-          "tier": "bulk10",
-          "minQty": 10,
-          "maxQty": null,
-          "pricePerUnit": 149,
-          "discountPercent": 17
-        }
-      ],
-      "images": [
-        "/images/products/rocket-prism/main.jpg",
-        "/images/products/rocket-prism/detail.jpg"
-      ],
-      "tags": ["Rocket Prism", "5AC Gen2", "RF filtering", "Ubiquiti", "airMAX", "radio"],
-      "shipping": {
-        "weight": 1.0,
-        "shippable": true,
-        "localPickupPreferred": false,
-        "shippingNotes": "Ships USPS Priority Mail or UPS Ground."
-      },
-      "specs": {
-        "Frequency": "5 GHz",
-        "Throughput": "500+ Mbps",
-        "Interface": "1x Gigabit Ethernet",
-        "Power": "24V Passive PoE",
-        "Technology": "airMAX AC with GPS Sync",
-        "Special": "Active RF Filtering (Prism)"
-      },
-      "featured": true,
-      "active": true
-    },
-    {
-      "sku": "AM-5G20-90",
-      "brand": "Ubiquiti",
-      "model": "airMAX Sector AM-5G20-90",
-      "name": "Ubiquiti airMAX Sector 5GHz 20dBi 90°",
-      "category": "antenna",
-      "shortDescription": "5GHz 20dBi 90° sector antenna. Tested and verified.",
-      "longDescription": "The AM-5G20-90 is a 5GHz 90-degree sector antenna used for point-to-multipoint coverage in WISP and campus-style networks. Units have been verified working. Great for deployments, spares, or lab inventory. Note: These are large antennas and shipping can be expensive - local pickup strongly recommended.",
-      "condition": "tested-working",
-      "conditionNotes": "Tested working. Some boxes show wear but equipment is verified functional.",
-      "quantity": 18,
-      "pricing": [
-        {
-          "tier": "single",
-          "minQty": 1,
-          "maxQty": 4,
-          "pricePerUnit": 119,
-          "discountPercent": 0
-        },
-        {
-          "tier": "bulk5",
-          "minQty": 5,
-          "maxQty": 9,
-          "pricePerUnit": 107,
-          "discountPercent": 10
-        },
-        {
-          "tier": "bulk10",
-          "minQty": 10,
-          "maxQty": null,
-          "pricePerUnit": 99,
-          "discountPercent": 17
-        }
-      ],
-      "images": [
-        "/images/products/am-5g20-90/main.jpg",
-        "/images/products/am-5g20-90/mounting.jpg"
-      ],
-      "tags": ["airMAX", "Sector Antenna", "90 degree", "5GHz", "WISP", "Ubiquiti", "antenna"],
-      "shipping": {
-        "weight": 8.0,
-        "shippable": true,
-        "localPickupPreferred": true,
-        "shippingNotes": "⚠️ LARGE/HEAVY ITEM - Local pickup strongly recommended. If shipping, buyer pays actual freight cost. Contact for shipping quote."
-      },
-      "specs": {
-        "Frequency": "5.45-5.85 GHz",
-        "Gain": "20 dBi",
-        "Beamwidth": "90° H / 6° V",
-        "Polarization": "Dual Linear",
-        "Connector": "2x RP-SMA",
-        "Dimensions": "27.6 x 5.5 x 3.2 in"
-      },
-      "featured": false,
-      "active": true
-    },
-    {
-      "sku": "PBE-5AC-Gen2-US",
-      "brand": "Ubiquiti",
-      "model": "PowerBeam AC Gen2",
-      "name": "Ubiquiti PowerBeam AC Gen2",
-      "category": "radio",
-      "shortDescription": "Unopened/new. Great for high-performance point-to-point links.",
-      "longDescription": "Brand new and unopened PowerBeam AC Gen2 units. Ideal for point-to-point wireless bridging and backhaul setups where stable throughput matters. These are factory sealed units that were purchased for a project that never happened.",
-      "condition": "new",
-      "conditionNotes": "NEW - Unopened factory sealed boxes.",
-      "quantity": 2,
-      "pricing": [
-        {
-          "tier": "single",
-          "minQty": 1,
-          "maxQty": 4,
-          "pricePerUnit": 189,
-          "discountPercent": 0
-        },
-        {
-          "tier": "bulk5",
-          "minQty": 5,
-          "maxQty": 9,
-          "pricePerUnit": 189,
-          "discountPercent": 0
-        },
-        {
-          "tier": "bulk10",
-          "minQty": 10,
-          "maxQty": null,
-          "pricePerUnit": 189,
-          "discountPercent": 0
-        }
-      ],
-      "images": [
-        "/images/products/powerbeam/main.jpg",
-        "/images/products/powerbeam/box.jpg"
-      ],
-      "tags": ["PowerBeam", "AC Gen2", "5GHz", "PtP", "backhaul", "Ubiquiti", "radio", "new"],
-      "shipping": {
-        "weight": 3.0,
-        "shippable": true,
-        "localPickupPreferred": false,
-        "shippingNotes": "Ships UPS Ground. Factory sealed box."
-      },
-      "specs": {
-        "Frequency": "5 GHz",
-        "Throughput": "450+ Mbps",
-        "Range": "25+ km",
-        "Gain": "25 dBi integrated dish",
-        "Interface": "1x Gigabit Ethernet",
-        "Power": "24V Passive PoE (included)"
-      },
-      "featured": true,
-      "active": true
-    },
-    {
-      "sku": "MA-INJ-4",
-      "brand": "Cisco Meraki",
-      "model": "MA-INJ-4",
-      "name": "Cisco Meraki 802.3at PoE Injector",
-      "category": "accessory",
-      "shortDescription": "Unused/like-new. Ready to power Meraki gear.",
-      "longDescription": "Meraki MA-INJ-4 injectors for powering compatible Meraki APs and devices. Units are unused/never deployed (open box condition). Great for spares, installs, and small inventory stocking. These provide 802.3at (PoE+) power for high-power devices.",
-      "condition": "like-new",
-      "conditionNotes": "Unused, never deployed. May be open box.",
-      "quantity": 15,
-      "pricing": [
-        {
-          "tier": "single",
-          "minQty": 1,
-          "maxQty": 4,
-          "pricePerUnit": 49,
-          "discountPercent": 0
-        },
-        {
-          "tier": "bulk5",
-          "minQty": 5,
-          "maxQty": 9,
-          "pricePerUnit": 44,
-          "discountPercent": 10
-        },
-        {
-          "tier": "bulk10",
-          "minQty": 10,
-          "maxQty": null,
-          "pricePerUnit": 39,
-          "discountPercent": 20
-        }
-      ],
-      "images": [
-        "/images/products/meraki-poe/main.jpg"
-      ],
-      "tags": ["Meraki", "PoE injector", "802.3at", "MA-INJ-4", "Cisco", "accessory", "power"],
-      "shipping": {
-        "weight": 0.5,
-        "shippable": true,
-        "localPickupPreferred": false,
-        "shippingNotes": "Ships USPS Priority Mail. Light and easy to ship."
-      },
-      "specs": {
-        "Standard": "802.3at (PoE+)",
-        "Power Output": "30W",
-        "Input": "100-240V AC",
-        "Output": "48V DC",
-        "Compatibility": "Meraki MR, MS, MV series"
-      },
-      "featured": false,
-      "active": true
     }
   ],
   "meta": {
-    "lastUpdated": "2026-01-20",
+    "lastUpdated": "2026-01-22",
     "currency": "USD",
-    "paypalFeePercent": 3,
     "location": "Palm Harbor, FL",
     "contactEmail": "nick@itprodirect.com"
   }
 }
 ```
 
+*Note: Full products.json includes all 5 products. See actual file for complete data.*
+
 ---
 
-## Pricing Helper Functions
+## Pricing Display Helpers
 
 **File:** `lib/pricing.ts`
 
+These helpers are for **displaying** pricing information. Actual pricing/payment is handled offline after customer contact.
+
 ```typescript
-import { Product, PricingTier, CartItem } from "@/types/product";
-
-/**
- * Get the price per unit for a given quantity
- */
-export function getPriceForQuantity(product: Product, quantity: number): number {
-  const tier = product.pricing.find(
-    (t) => quantity >= t.minQty && (t.maxQty === null || quantity <= t.maxQty)
-  );
-  return tier?.pricePerUnit ?? product.pricing[0].pricePerUnit;
-}
-
-/**
- * Get the applicable pricing tier for a quantity
- */
-export function getTierForQuantity(product: Product, quantity: number): PricingTier | undefined {
-  return product.pricing.find(
-    (t) => quantity >= t.minQty && (t.maxQty === null || quantity <= t.maxQty)
-  );
-}
-
-/**
- * Calculate line total for a cart item
- */
-export function calculateLineTotal(unitPrice: number, quantity: number): number {
-  return Math.round(unitPrice * quantity * 100) / 100;
-}
-
-/**
- * Calculate PayPal fee (3%)
- */
-export function calculatePayPalFee(subtotal: number): number {
-  return Math.round(subtotal * 0.03 * 100) / 100;
-}
-
-/**
- * Calculate cart totals
- */
-export function calculateCartTotals(
-  items: CartItem[],
-  paymentMethod: "wire" | "ach" | "paypal",
-  shippingCost: number = 0
-): {
-  subtotal: number;
-  paypalFee: number;
-  shippingCost: number;
-  total: number;
-} {
-  const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
-  const paypalFee = paymentMethod === "paypal" ? calculatePayPalFee(subtotal) : 0;
-  const total = subtotal + paypalFee + shippingCost;
-
-  return {
-    subtotal: Math.round(subtotal * 100) / 100,
-    paypalFee: Math.round(paypalFee * 100) / 100,
-    shippingCost: Math.round(shippingCost * 100) / 100,
-    total: Math.round(total * 100) / 100,
-  };
-}
+import { PricingTier } from "@/types/product";
 
 /**
  * Format currency for display
@@ -506,6 +202,16 @@ export function getTierLabel(tier: PricingTier): string {
   }
   return `${tier.minQty}-${tier.maxQty} units`;
 }
+
+/**
+ * Get the price per unit for a given quantity (for display)
+ */
+export function getPriceForQuantity(pricing: PricingTier[], quantity: number): number {
+  const tier = pricing.find(
+    (t) => quantity >= t.minQty && (t.maxQty === null || quantity <= t.maxQty)
+  );
+  return tier?.pricePerUnit ?? pricing[0].pricePerUnit;
+}
 ```
 
 ---
@@ -517,6 +223,7 @@ export function getTierLabel(tier: PricingTier): string {
 ```typescript
 import { z } from "zod";
 
+// Contact form validation
 export const contactFormSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   email: z.string().email("Invalid email address"),
@@ -525,46 +232,28 @@ export const contactFormSchema = z.object({
   website: z.string().optional(), // Honeypot
 });
 
-export const customerSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(10, "Phone number is required for orders"),
-  address: z
-    .object({
-      street: z.string().min(1, "Street address is required"),
-      city: z.string().min(1, "City is required"),
-      state: z.string().min(2, "State is required"),
-      zip: z.string().min(5, "ZIP code is required"),
-    })
-    .optional(),
-});
-
-export const orderItemSchema = z.object({
-  sku: z.string(),
-  name: z.string(),
-  quantity: z.number().int().positive(),
-  unitPrice: z.number().positive(),
-  lineTotal: z.number().positive(),
-});
-
-export const orderSchema = z.object({
-  customer: customerSchema,
-  items: z.array(orderItemSchema).min(1, "Order must have at least one item"),
-  shipping: z.object({
-    method: z.enum(["pickup", "ship"]),
-    cost: z.number().min(0),
+// Order request validation (simplified)
+export const orderRequestSchema = z.object({
+  customer: z.object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email").optional().or(z.literal("")),
+    phone: z.string().min(10, "Phone number is required"),
   }),
-  payment: z.object({
-    method: z.enum(["wire", "ach", "paypal"]),
-    subtotal: z.number().positive(),
-    paypalFee: z.number().min(0),
-    total: z.number().positive(),
+  items: z.array(
+    z.object({
+      sku: z.string(),
+      name: z.string(),
+      qty: z.number().int().positive(),
+    })
+  ).min(1, "At least one item is required"),
+  fulfillment: z.object({
+    method: z.enum(["pickup", "ship"]).default("pickup"),
   }),
   notes: z.string().optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
-export type OrderData = z.infer<typeof orderSchema>;
+export type OrderRequestData = z.infer<typeof orderRequestSchema>;
 ```
 
 ---
@@ -646,26 +335,29 @@ export function getSiteMetadata() {
 
 Products reference images in `public/images/products/[sku]/`. If images don't exist yet, the frontend shows a placeholder.
 
-**Placeholder Component Example:**
+**Placeholder Component:**
 
 ```typescript
 // components/ui/ProductImage.tsx
+"use client";
+
 import Image from "next/image";
 import { useState } from "react";
 
 interface ProductImageProps {
   src: string;
   alt: string;
+  fill?: boolean;
   className?: string;
 }
 
-export function ProductImage({ src, alt, className }: ProductImageProps) {
+export function ProductImage({ src, alt, fill, className }: ProductImageProps) {
   const [error, setError] = useState(false);
 
-  if (error) {
+  if (error || !src) {
     return (
-      <div className={`bg-gray-200 flex items-center justify-center ${className}`}>
-        <span className="text-gray-400 text-sm">No image</span>
+      <div className={`bg-gray-200 dark:bg-slate-700 flex items-center justify-center ${className}`}>
+        <span className="text-gray-400 dark:text-slate-500 text-sm">No image</span>
       </div>
     );
   }
@@ -674,10 +366,25 @@ export function ProductImage({ src, alt, className }: ProductImageProps) {
     <Image
       src={src}
       alt={alt}
-      fill
+      fill={fill}
       className={`object-cover ${className}`}
       onError={() => setError(true)}
     />
   );
 }
 ```
+
+---
+
+## Payment Information (Reference Only)
+
+Payment is handled **offline** after the owner contacts the customer. Accepted methods:
+
+| Method | Fee | Notes |
+|--------|-----|-------|
+| Wire Transfer | Free | Preferred for large orders |
+| ACH/Bank Transfer | Free | 2-3 business days |
+| PayPal | +3% | Buyer pays fee if choosing PayPal |
+| Cash | Free | Local pickup only |
+
+Payment details are communicated directly by the owner during follow-up, not displayed on the website.

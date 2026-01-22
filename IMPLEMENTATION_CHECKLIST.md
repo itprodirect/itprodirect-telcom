@@ -1,507 +1,228 @@
 # Implementation Checklist - IT Pro Direct Telecom Equipment Site
 
-> **Last Updated:** January 20, 2026  
-> **How to use:** Work through tasks sequentially. Each task builds on the previous.
+> **Last Updated:** January 22, 2026
+> **Status:** Phases 0-3 complete, Phase 4 in progress
 
 ---
 
-## Phase 0: Pre-Development Setup
+## Phase 0: Pre-Development Setup [COMPLETE]
 
 ### 0.1 Local Environment
-- [ ] **Verify Node.js installed** (v18+ recommended)
-  ```bash
-  node --version
-  npm --version
-  ```
-- [ ] **Verify Git Bash is working**
-  ```bash
-  git --version
-  ```
+- [x] **Verify Node.js installed** (v18+)
+- [x] **Verify Git Bash is working**
 
 ### 0.2 Create GitHub Repository
-- [ ] **Create new repo on GitHub**
-  - Name: `itprodirect-telecom` (or similar)
-  - Public or Private (your choice)
-  - Initialize with README: No (we'll push our own)
-- [ ] **Clone locally**
-  ```bash
-  cd /c/Dev/itprodirect  # or your preferred path
-  git clone https://github.com/YOUR-USERNAME/itprodirect-telecom.git
-  cd itprodirect-telecom
-  ```
+- [x] **Create new repo on GitHub** (itprodirect-telecom)
+- [x] **Clone locally**
 
 ### 0.3 Copy Planning Docs
-- [ ] **Copy all planning documents to repo**
-  - `MIGRATION_PLAN.md` → repo root
-  - `IMPLEMENTATION_CHECKLIST.md` → repo root
-  - `docs/ARCHITECTURE.md`
-  - `docs/AWS_INTEGRATION.md`
-  - `docs/DATA_MODEL.md`
-  - `.env.example` → repo root
-  - `EXTERNAL_REQUIREMENTS.md` → repo root
+- [x] **Copy all planning documents to repo**
 
 ### 0.4 Initial Commit
-- [ ] **Commit planning docs**
-  ```bash
-  git add .
-  git commit -m "Initial commit: planning documentation"
-  git push origin main
-  ```
+- [x] **Commit planning docs**
 
 ---
 
-## Phase 1: Next.js Foundation (Days 1-2)
+## Phase 1: Next.js Foundation [COMPLETE]
 
 ### 1.1 Initialize Next.js Project
-- [ ] **Create Next.js app with App Router**
-  ```bash
-  npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir=false --import-alias="@/*"
-  ```
-  - When prompted, accept defaults or customize as needed
-  - This creates in current directory since we already have the repo
+- [x] **Create Next.js app with App Router**
 
 ### 1.2 Project Structure Setup
-- [ ] **Create folder structure**
-  ```bash
-  mkdir -p components/layout
-  mkdir -p components/products
-  mkdir -p components/forms
-  mkdir -p components/cart
-  mkdir -p components/ui
-  mkdir -p lib
-  mkdir -p types
-  mkdir -p data
-  mkdir -p public/images/products/rocketm5
-  mkdir -p public/images/products/rocket-prism
-  mkdir -p public/images/products/am-5g20-90
-  mkdir -p public/images/products/powerbeam
-  mkdir -p public/images/products/meraki-poe
-  ```
+- [x] **Create folder structure** (components, lib, types, data, public)
 
 ### 1.3 TypeScript Types
-- [ ] **Create types/product.ts** from DATA_MODEL.md
-- [ ] **Create types/order.ts** from DATA_MODEL.md
-- [ ] **Create types/contact.ts** from DATA_MODEL.md
+- [x] **Create types/product.ts**
 
 ### 1.4 Product Data
-- [ ] **Create data/products.json** from DATA_MODEL.md
-- [ ] **Verify JSON is valid**
-  ```bash
-  node -e "require('./data/products.json')"
-  ```
+- [x] **Create data/products.json**
 
 ### 1.5 Utility Libraries
-- [ ] **Create lib/products.ts** - product data loading functions
-- [ ] **Create lib/pricing.ts** - pricing calculation functions
-- [ ] **Create lib/validation.ts** - Zod schemas (install zod first)
-  ```bash
-  npm install zod
-  ```
+- [x] **Create lib/products.ts** - product data loading functions
+- [x] **Create lib/pricing.ts** - pricing display functions
+- [x] **Create lib/validation.ts** - Zod schemas
+- [x] **Install zod**
 
 ### 1.6 Tailwind Configuration
-- [ ] **Update tailwind.config.ts** for custom colors/theme
-  ```typescript
-  // Add custom brand colors if desired
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          50: '#f0f9ff',
-          // ... blue-ish theme
-          600: '#0284c7',
-        }
-      }
-    }
-  }
-  ```
+- [x] **Configure Tailwind with dark mode support**
 
 ### 1.7 Base Layout
-- [ ] **Create components/layout/Header.tsx**
-  - Logo/site name
-  - Navigation: Home, Products, Contact
-  - Simple cart indicator (count)
-- [ ] **Create components/layout/Footer.tsx**
-  - Contact info
-  - Location (Palm Harbor, FL)
-  - Copyright
-- [ ] **Create components/layout/Nav.tsx**
-  - Responsive navigation
-- [ ] **Update app/layout.tsx**
-  - Import Header and Footer
-  - Set metadata (title, description)
-  - Wrap children in layout structure
+- [x] **Create components/layout/Header.tsx**
+- [x] **Create components/layout/Footer.tsx**
+- [x] **Create components/layout/Nav.tsx**
+- [x] **Update app/layout.tsx**
 
 ### 1.8 Placeholder Image Component
-- [ ] **Create components/ui/ProductImage.tsx**
-  - Shows placeholder if image fails to load
-- [ ] **Create public/images/placeholder.svg**
-  - Simple gray placeholder with camera icon
+- [x] **Create components/ui/ProductImage.tsx**
 
 ### 1.9 Verify Foundation
-- [ ] **Run dev server**
-  ```bash
-  npm run dev
-  ```
-- [ ] **Verify at http://localhost:3000**
-  - Header displays
-  - Footer displays
-  - No console errors
-
-### 1.10 Commit Phase 1
-- [ ] **Commit progress**
-  ```bash
-  git add .
-  git commit -m "Phase 1: Next.js foundation, types, layout"
-  git push
-  ```
+- [x] **Run dev server** - working at localhost:3000
 
 ---
 
-## Phase 2: Core Pages (Days 3-4)
+## Phase 2: Core Pages [COMPLETE]
 
 ### 2.1 Home Page
-- [ ] **Update app/page.tsx**
-  - Hero section with headline
-  - "Surplus Telecom Equipment from Tampa Bay"
-  - Featured products grid (3-4 items)
-  - "Local Pickup Available" callout
-  - Contact CTA button
+- [x] **Update app/page.tsx** with hero, featured products, CTAs
 
 ### 2.2 Product Components
-- [ ] **Create components/products/ProductCard.tsx**
-  - Image (with fallback)
-  - Name, brand
-  - Starting price ("From $XX")
-  - Condition badge
-  - Quantity available
-  - "View Details" link
-- [ ] **Create components/products/ProductGrid.tsx**
-  - Grid layout for ProductCards
-  - Responsive (1 col mobile, 2 tablet, 3 desktop)
-- [ ] **Create components/products/ProductFilters.tsx**
-  - Filter by brand (Ubiquiti / Cisco Meraki)
-  - Filter by category (Radios / Antennas / Accessories)
-  - Clear filters button
-- [ ] **Create components/products/PricingTable.tsx**
-  - Display tier pricing (1-4, 5-9, 10+)
-  - Highlight savings percentages
-- [ ] **Create components/products/ProductGallery.tsx**
-  - Main image display
-  - Thumbnail navigation (if multiple images)
-  - Fallback placeholder
+- [x] **Create components/products/ProductCard.tsx**
+- [x] **Create components/products/ProductGrid.tsx**
+- [x] **Create components/products/ProductFilters.tsx**
+- [x] **Create components/products/PricingTable.tsx**
+- [x] **Create components/products/ProductGallery.tsx**
 
 ### 2.3 Products Listing Page
-- [ ] **Create app/products/page.tsx**
-  - Load all products via getProducts()
-  - ProductFilters component
-  - ProductGrid with all products
-  - SEO metadata
+- [x] **Create app/products/page.tsx**
 
 ### 2.4 Product Detail Page
-- [ ] **Create app/products/[sku]/page.tsx**
-  - Dynamic route for each product
-  - ProductGallery
-  - Full description
-  - Condition notes
-  - PricingTable
-  - Specs table
-  - Shipping notes (especially for heavy items)
-  - "Add to Cart" / "Contact for Bulk" buttons
-  - SEO metadata with product name
+- [x] **Create app/products/[sku]/page.tsx**
+- [x] **"Contact to Order" button** links to /contact (or will link to /checkout)
 
 ### 2.5 About Page
-- [ ] **Create app/about/page.tsx**
-  - About IT Pro Direct
-  - Equipment backstory (family business, unused from big job)
-  - Why buy from us (tested, local support)
-  - Contact info
+- [x] **Create app/about/page.tsx**
 
 ### 2.6 Contact Page
-- [ ] **Create app/contact/page.tsx**
-  - Contact form (UI only for now)
-  - Direct email link
-  - Phone (optional)
-  - Location mention (Tampa Bay)
-  - Map embed (optional, can add later)
+- [x] **Create app/contact/page.tsx**
 
 ### 2.7 UI Components
-- [ ] **Create components/ui/Button.tsx**
-  - Primary, secondary, outline variants
-  - Loading state
-- [ ] **Create components/ui/Input.tsx**
-  - Text, email, tel, textarea variants
-  - Error state display
-- [ ] **Create components/ui/Badge.tsx**
-  - Condition badges (New, Like-New, Tested)
-  - Info badges (Bulk Available, Local Pickup)
-
-### 2.8 Verify Pages
-- [ ] **Test all pages manually**
-  - Home: /
-  - Products: /products
-  - Product Detail: /products/RocketM5-US (and others)
-  - About: /about
-  - Contact: /contact
-- [ ] **Check mobile responsiveness**
-- [ ] **Fix any TypeScript errors**
-
-### 2.9 Commit Phase 2
-- [ ] **Commit progress**
-  ```bash
-  git add .
-  git commit -m "Phase 2: Core pages - home, products, about, contact"
-  git push
-  ```
+- [x] **Create components/ui/Button.tsx**
+- [x] **Create components/ui/Input.tsx**
+- [x] **Create components/ui/Badge.tsx**
+- [x] **Create components/ui/ThemeToggle.tsx**
 
 ---
 
-## Phase 3: AWS Backend (Days 5-6)
+## Phase 3: AWS Backend [COMPLETE]
 
-### 3.1 AWS Setup (Manual Steps)
-- [ ] **Create Lambda functions in AWS Console**
+### 3.1 AWS Setup
+- [x] **Create Lambda functions in AWS Console**
   - `itprodirect-contact` - Contact form handler
-  - `itprodirect-orders` - Order handler
-  - Runtime: Node.js 18.x
-  - Copy code from AWS_INTEGRATION.md
-- [ ] **Create API Gateway REST API**
-  - Name: `itprodirect-telecom-api`
-  - Create resources: /contact, /orders
-  - Create POST methods linked to Lambdas
-  - Enable CORS
-  - Deploy to `prod` stage
-- [ ] **Note API endpoint URL**
-  - Format: `https://XXXXXX.execute-api.us-east-1.amazonaws.com/prod`
+  - `itprodirect-orders` - Order request handler
+- [x] **Create API Gateway HTTP API**
+  - POST /contact
+  - POST /orders
+  - CORS enabled
 
 ### 3.2 SES Setup
-- [ ] **Verify email in SES**
-  - Add and verify: nick@itprodirect.com
-- [ ] **Update Lambda environment variables**
-  - OWNER_EMAIL=nick@itprodirect.com
-  - FROM_EMAIL=nick@itprodirect.com (or noreply if verified)
+- [x] **Verify email in SES** (nick@itprodirect.com)
 
 ### 3.3 Test AWS Endpoints
-- [ ] **Test contact endpoint with curl**
-  ```bash
-  curl -X POST https://YOUR-API-ID.execute-api.us-east-1.amazonaws.com/prod/contact \
-    -H "Content-Type: application/json" \
-    -d '{"name":"Test","email":"test@test.com","message":"Test message here"}'
-  ```
-- [ ] **Verify email received**
+- [x] **Test contact endpoint with curl** - working
+- [x] **Test orders endpoint with curl** - working
+- [x] **Verify emails received**
 
 ### 3.4 Environment Variables
-- [ ] **Create .env.local file**
-  ```bash
-  cp .env.example .env.local
-  ```
-- [ ] **Add AWS API URL to .env.local**
-  ```
-  NEXT_PUBLIC_API_URL=https://YOUR-API-ID.execute-api.us-east-1.amazonaws.com/prod
-  ```
+- [x] **Create .env.local file** (or set in Vercel)
+- [x] **Add AWS API URL**
 
 ### 3.5 API Client
-- [ ] **Create lib/api.ts**
-  ```typescript
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL;
-
-  export async function submitContactForm(data: ContactFormData) {
-    const response = await fetch(`${API_BASE}/contact`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  }
-
-  export async function submitOrder(data: OrderData) {
-    const response = await fetch(`${API_BASE}/orders`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  }
-  ```
+- [x] **Create lib/api.ts** with submitContactForm and submitOrder
 
 ### 3.6 Connect Contact Form
-- [ ] **Create components/forms/ContactForm.tsx**
-  - Form fields: name, email, phone (optional), message
-  - Hidden honeypot field (website)
-  - Client-side validation
-  - Submit to API
-  - Success/error states
-  - Loading state
-- [ ] **Update app/contact/page.tsx** to use ContactForm
-
-### 3.7 Test Contact Form End-to-End
-- [ ] **Submit test contact form**
-- [ ] **Verify email received at nick@itprodirect.com**
-- [ ] **Check form shows success message**
-
-### 3.8 Commit Phase 3
-- [ ] **Commit progress**
-  ```bash
-  git add .
-  git commit -m "Phase 3: AWS backend integration - contact form working"
-  git push
-  ```
+- [x] **Create components/forms/ContactForm.tsx**
+- [x] **Test end-to-end** - working, "Message Sent!" displays
 
 ---
 
-## Phase 4: Cart & Checkout (Days 7-8)
+## Phase 4: Order Request Page [IN PROGRESS]
 
-### 4.1 Cart State Management
-- [ ] **Create lib/cart.ts**
-  - Cart context and provider
-  - Add/remove/update items
-  - Persist to localStorage
-  - Calculate totals
-- [ ] **Create components/cart/CartProvider.tsx**
-  - Wrap app in cart context
-- [ ] **Update app/layout.tsx** to include CartProvider
+This phase implements a simplified "order request" flow - no cart, no online payment.
 
-### 4.2 Cart Components
-- [ ] **Create components/cart/AddToCart.tsx**
-  - Quantity selector
-  - Add to cart button
-  - Shows current price based on quantity
-- [ ] **Create components/cart/CartSummary.tsx**
-  - List of items in cart
-  - Quantity adjusters
-  - Remove item button
-  - Subtotal
-- [ ] **Update Header** to show cart count
-
-### 4.3 Integrate Add to Cart
-- [ ] **Update product detail page**
-  - Add AddToCart component
-  - Connect to cart context
-
-### 4.4 Checkout Page
+### 4.1 Create Order Request Page
 - [ ] **Create app/checkout/page.tsx**
-  - Cart summary (editable)
-  - Customer information form
-  - Shipping method (Pickup / Ship)
-  - Address form (if Ship selected)
-  - Payment method selector
-- [ ] **Create components/forms/CheckoutForm.tsx**
-  - Full checkout form logic
-  - Validation
-  - Submit to orders API
-- [ ] **Create components/forms/PaymentSelector.tsx**
-  - Radio buttons: Wire, ACH, PayPal
-  - Show +3% fee when PayPal selected
-  - Update totals in real-time
+  - Simple form: name, phone, email (optional)
+  - Product selection (from URL params or manual entry)
+  - Quantity selector
+  - Fulfillment preference (pickup recommended, shipping available)
+  - Notes field
+  - Submit button
 
-### 4.5 Order Confirmation
-- [ ] **Create app/checkout/confirmation/page.tsx**
-  - Or use client-side state to show confirmation
-  - Display order ID
-  - Show payment instructions
-  - "Continue Shopping" button
+### 4.2 Order Request Form Component
+- [ ] **Create components/forms/OrderRequestForm.tsx**
+  - Form fields with validation (Zod)
+  - Submit to AWS /orders endpoint
+  - Loading state
+  - Success/error states
+  - Display order ID on success
 
-### 4.6 Test Order Flow
-- [ ] **Add items to cart**
-- [ ] **Go through checkout**
-- [ ] **Submit test order**
-- [ ] **Verify emails received (owner + customer)**
-- [ ] **Verify confirmation displays**
+### 4.3 Update Validation Schema
+- [ ] **Update lib/validation.ts**
+  - Add orderRequestSchema (simplified)
+  - Remove complex payment schemas
 
-### 4.7 Edge Cases
-- [ ] **Test empty cart checkout (should redirect)**
-- [ ] **Test PayPal fee calculation**
-- [ ] **Test form validation errors**
-- [ ] **Test shipping vs pickup flows**
+### 4.4 Update API Client
+- [ ] **Update lib/api.ts**
+  - Update submitOrder to use simplified payload
+  - Match AWS Lambda expected format
+
+### 4.5 Update Product Detail Page
+- [ ] **Update app/products/[sku]/page.tsx**
+  - "Contact to Order" button links to /checkout with product context
+  - Pass SKU, name, suggested quantity via URL params
+
+### 4.6 Update Header Navigation
+- [ ] **Update components/layout/Header.tsx**
+  - Change "Cart" button to "Order" or "Request Quote"
+  - Link to /checkout instead of showing cart count
+
+### 4.7 Test Order Request Flow
+- [ ] **Test form validation**
+- [ ] **Submit test order request**
+- [ ] **Verify email received at nick@itprodirect.com**
+- [ ] **Verify success message displays with order ID**
 
 ### 4.8 Commit Phase 4
 - [ ] **Commit progress**
   ```bash
   git add .
-  git commit -m "Phase 4: Cart and checkout flow complete"
+  git commit -m "Phase 4: Order request page - simplified checkout flow"
   git push
   ```
 
 ---
 
-## Phase 5: Polish & Deploy (Days 9-10)
+## Phase 5: Polish & Deploy [PENDING]
 
 ### 5.1 SEO Metadata
 - [ ] **Update app/layout.tsx metadata**
-  ```typescript
-  export const metadata = {
-    title: 'IT Pro Direct | Surplus Telecom Equipment',
-    description: 'Quality tested Ubiquiti and Cisco Meraki networking gear. Tampa Bay area. Wire/ACH/PayPal accepted.',
-    keywords: ['Ubiquiti', 'Meraki', 'WISP', 'airMAX', 'networking', 'Tampa Bay'],
-  };
-  ```
 - [ ] **Add metadata to each page**
-- [ ] **Create app/robots.txt** (via route or static file)
-- [ ] **Create app/sitemap.ts** (dynamic sitemap)
 
 ### 5.2 Add Product Images
-- [ ] **Take photos of each product** (see EXTERNAL_REQUIREMENTS.md for guidelines)
-- [ ] **Process images** (resize, optimize)
+- [ ] **Take photos of each product**
 - [ ] **Add to public/images/products/[sku]/**
-- [ ] **Update products.json** if image paths change
+- [ ] **Update products.json if needed**
 
 ### 5.3 Final Content Review
 - [ ] **Review all product descriptions**
 - [ ] **Verify pricing is correct**
 - [ ] **Verify quantities match inventory**
-- [ ] **Update any placeholder text**
 
 ### 5.4 Mobile Testing
 - [ ] **Test on real mobile device**
 - [ ] **Fix any responsive issues**
-- [ ] **Test touch interactions (cart, forms)**
 
 ### 5.5 Performance Check
 - [ ] **Run Lighthouse audit**
-  - Target: 90+ Performance
-  - Target: 90+ Accessibility
-  - Target: 90+ Best Practices
-  - Target: 90+ SEO
 - [ ] **Optimize images if needed**
-- [ ] **Fix any flagged issues**
 
 ### 5.6 Vercel Deployment
-- [ ] **Connect GitHub repo to Vercel**
-  - Go to vercel.com
-  - Import project from GitHub
-  - Select itprodirect-telecom repo
-- [ ] **Configure environment variables in Vercel**
-  - Add NEXT_PUBLIC_API_URL
-  - Add any other env vars from .env.example
-- [ ] **Deploy**
-- [ ] **Note Vercel URL** (e.g., itprodirect-telecom.vercel.app)
+- [ ] **Verify deployment is working** (already connected)
+- [ ] **Set environment variables in Vercel dashboard**
+  - NEXT_PUBLIC_API_URL
 
 ### 5.7 Post-Deploy Testing
 - [ ] **Test live site completely**
   - All pages load
   - Contact form works
-  - Cart works
-  - Checkout works (test order)
+  - Order request form works
   - Emails received
-- [ ] **Test on mobile (live URL)**
-- [ ] **Share with family for feedback**
 
-### 5.8 Update AWS CORS (Production)
-- [ ] **Restrict CORS to Vercel domain**
-  - Update API Gateway CORS settings
-  - Allow only your-site.vercel.app
-  - Redeploy API
-
-### 5.9 Final Commit
+### 5.8 Final Commit
 - [ ] **Commit any final changes**
-  ```bash
-  git add .
-  git commit -m "Phase 5: Polish, images, and production deployment"
-  git push
-  ```
 
-### 5.10 Go Live! 🚀
+### 5.9 Go Live!
 - [ ] **Site is live and ready for promotion**
-- [ ] **Start sharing with family/network**
-- [ ] **Monitor for orders**
 
 ---
 
@@ -510,15 +231,13 @@
 ### Ongoing
 - [ ] Update inventory quantities as items sell
 - [ ] Add new products if more equipment surfaces
-- [ ] Monitor AWS costs (should be minimal/free tier)
-- [ ] Respond to inquiries promptly
+- [ ] Monitor for inquiries and respond promptly
 
 ### Future Enhancements (Optional)
 - [ ] Add DynamoDB for order tracking
-- [ ] Add inventory auto-decrement
 - [ ] Custom domain setup
 - [ ] Google Analytics integration
-- [ ] Stripe payment integration
+- [ ] Request SES production access for customer emails
 
 ---
 
@@ -527,8 +246,7 @@
 ```bash
 # Development
 npm run dev              # Start dev server
-npm run build            # Build for production
-npm run start            # Start production server
+npm run build            # Production build
 npm run lint             # Run linter
 
 # Git
@@ -540,3 +258,16 @@ git push                 # Push to GitHub
 # Testing
 curl -X POST URL -H "Content-Type: application/json" -d '{...}'
 ```
+
+---
+
+## Current Status Summary
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| Phase 0 | Complete | Setup done |
+| Phase 1 | Complete | Foundation built |
+| Phase 2 | Complete | Core pages working |
+| Phase 3 | Complete | AWS backend working, contact form working |
+| Phase 4 | In Progress | Need to create /checkout page |
+| Phase 5 | Pending | Polish and final deploy |

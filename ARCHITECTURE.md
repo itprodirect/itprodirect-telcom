@@ -1,6 +1,6 @@
 # Architecture - IT Pro Direct Telecom Equipment Site
 
-> **Last Updated:** January 20, 2026
+> **Last Updated:** January 22, 2026
 
 ---
 
@@ -18,7 +18,7 @@
 │  │                   Next.js App Router                      │  │
 │  │  • Static pages (products, about)                         │  │
 │  │  • Server components for product data                     │  │
-│  │  • API routes as thin proxies to AWS                      │  │
+│  │  • Direct calls to AWS API Gateway                        │  │
 │  └───────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
                                 │
@@ -27,20 +27,29 @@
 │                      AWS (Backend)                              │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
 │  │  API Gateway    │  │    Lambda       │  │      SES       │  │
-│  │  (REST API)     │──│  (Node.js 18)   │──│  (Email)       │  │
+│  │  (HTTP API)     │──│  (Node.js 18)   │──│  (Email)       │  │
 │  │                 │  │                 │  │                │  │
 │  │  POST /contact  │  │  contactHandler │  │  To: owner     │  │
-│  │  POST /orders   │  │  orderHandler   │  │  To: buyer     │  │
+│  │  POST /orders   │  │  orderHandler   │  │                │  │
 │  └─────────────────┘  └─────────────────┘  └────────────────┘  │
-│                                │                                │
-│                                ▼                                │
-│                       ┌─────────────────┐                       │
-│                       │   DynamoDB      │                       │
-│                       │   (Optional)    │                       │
-│                       │   Order history │                       │
-│                       └─────────────────┘                       │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Business Model: "Order Request" Flow
+
+This site uses a **simplified order request model** optimized for local pickup:
+
+1. **No online payment processing** - Payment is arranged after contact
+2. **Local pickup preferred** - Palm Harbor, FL (Tampa Bay area)
+3. **Shipping available** - Contact owner to arrange shipping for shippable items
+4. **Owner follows up** - All order requests trigger email to owner who contacts customer
+
+This approach works well for:
+- Low-volume liquidation sales
+- Heavy items where shipping is complex
+- Building customer relationships before payment
 
 ---
 
@@ -58,14 +67,9 @@ app/
 ├── contact/
 │   └── page.tsx            # Contact form
 ├── checkout/
-│   └── page.tsx            # Order/checkout flow
-├── about/
-│   └── page.tsx            # About page
-└── api/
-    ├── contact/
-    │   └── route.ts        # Proxy to AWS contact Lambda
-    └── orders/
-        └── route.ts        # Proxy to AWS orders Lambda
+│   └── page.tsx            # Order request form
+└── about/
+    └── page.tsx            # About page
 
 components/
 ├── layout/
@@ -76,26 +80,21 @@ components/
 │   ├── ProductCard.tsx     # Product grid card
 │   ├── ProductGrid.tsx     # Products grid container
 │   ├── ProductGallery.tsx  # Image gallery for detail page
-│   ├── PricingTable.tsx    # Tier pricing display
+│   ├── PricingTable.tsx    # Tier pricing display (reference only)
 │   └── ProductFilters.tsx  # Brand/category filters
 ├── forms/
 │   ├── ContactForm.tsx     # Contact form component
-│   ├── CheckoutForm.tsx    # Order/checkout form
-│   └── PaymentSelector.tsx # Payment method selector with fee calc
-├── cart/
-│   ├── CartProvider.tsx    # Cart context provider
-│   ├── CartSummary.tsx     # Cart display component
-│   └── AddToCart.tsx       # Add to cart button
+│   └── OrderRequestForm.tsx # Simple order request form
 └── ui/
     ├── Button.tsx          # Reusable button
     ├── Input.tsx           # Form input
     ├── Badge.tsx           # Status/info badges
-    └── Placeholder.tsx     # Image placeholder
+    └── ProductImage.tsx    # Image with fallback
 
 lib/
 ├── products.ts             # Product data loader + helpers
-├── pricing.ts              # Price calculation functions
-├── cart.ts                 # Cart state management
+├── pricing.ts              # Price display helpers (formatCurrency, getTierLabel)
+├── validation.ts           # Zod schemas for forms
 └── api.ts                  # AWS API client
 
 data/
@@ -104,11 +103,6 @@ data/
 public/
 ├── images/
 │   ├── products/           # Product images (added by owner)
-│   │   ├── rocketm5/
-│   │   ├── rocket-prism/
-│   │   ├── am-5g20-90/
-│   │   ├── powerbeam/
-│   │   └── meraki-poe/
 │   └── placeholder.svg     # Default placeholder image
 └── favicon.ico
 ```
@@ -132,37 +126,42 @@ public/
 
 ```
 1. User fills ContactForm
-2. Client-side validation
-3. Form submits to /api/contact (Next.js API route)
-4. API route forwards to AWS API Gateway
-5. Lambda processes request
-6. SES sends email to nick@itprodirect.com
-7. Lambda returns success/error
-8. Frontend shows confirmation message
+2. Client-side Zod validation
+3. Form submits to AWS API Gateway /contact
+4. Lambda processes request
+5. SES sends email to nick@itprodirect.com
+6. Lambda returns success/error
+7. Frontend shows confirmation message
 ```
 
-### Order Submission
+### Order Request Submission
 
 ```
-1. User adds items to cart (localStorage)
-2. User goes to /checkout
-3. Selects payment method
-4. PayPal selected? → Show +3% fee
-5. Form submits to /api/orders
-6. API route forwards to AWS
-7. Lambda:
-   a. Validates order data
-   b. (Optional) Saves to DynamoDB
+1. User clicks "Contact to Order" on product page
+2. User redirected to /checkout (or /contact with product context)
+3. User fills order request form:
+   - Name, phone, email
+   - Items interested in (SKU, name, quantity)
+   - Fulfillment preference (pickup preferred)
+   - Notes (special requests)
+4. Form submits to AWS API Gateway /orders
+5. Lambda:
+   a. Validates required fields (name, phone, at least one item)
+   b. Generates order ID (ORD-YYYYMMDD-XXXXXX)
    c. Sends email to owner with order details
-   d. Sends confirmation email to buyer
-8. Frontend shows order confirmation with payment instructions
+   d. (Optional) Sends acknowledgment to customer
+6. Frontend shows confirmation with order ID
+7. Owner contacts customer to:
+   - Confirm item availability
+   - Arrange pickup time OR discuss shipping
+   - Collect payment (wire/ACH/PayPal/cash)
 ```
 
 ---
 
 ## API Contracts
 
-### POST /api/contact
+### POST /contact
 
 **Request:**
 ```json
@@ -191,40 +190,25 @@ public/
 }
 ```
 
-### POST /api/orders
+### POST /orders
 
-**Request:**
+**Request (Simplified Order Request):**
 ```json
 {
   "customer": {
     "name": "string (required)",
-    "email": "string (required)",
-    "phone": "string (required for orders)",
-    "address": {
-      "street": "string",
-      "city": "string",
-      "state": "string",
-      "zip": "string"
-    }
+    "email": "string (optional but recommended)",
+    "phone": "string (required)"
   },
   "items": [
     {
       "sku": "RocketM5-US",
       "name": "Ubiquiti RocketM5",
-      "quantity": 5,
-      "unitPrice": 62.10,
-      "lineTotal": 310.50
+      "qty": 5
     }
   ],
-  "shipping": {
-    "method": "pickup" | "ship",
-    "cost": 0
-  },
-  "payment": {
-    "method": "wire" | "ach" | "paypal",
-    "subtotal": 310.50,
-    "paypalFee": 0,
-    "total": 310.50
+  "fulfillment": {
+    "method": "pickup"
   },
   "notes": "string (optional)"
 }
@@ -234,12 +218,17 @@ public/
 ```json
 {
   "success": true,
-  "orderId": "ORD-20260120-ABC123",
-  "message": "Order received! Check your email for payment instructions.",
-  "paymentInstructions": {
-    "method": "wire",
-    "details": "Wire transfer instructions will be sent via email."
-  }
+  "orderId": "ORD-20260122-ABC123",
+  "message": "Order request received! We'll contact you to confirm details and payment."
+}
+```
+
+**Response (Error):**
+```json
+{
+  "success": false,
+  "error": "Validation failed",
+  "details": ["Customer name is required", "Phone number is required"]
 }
 ```
 
@@ -251,13 +240,12 @@ public/
 |-------|------------|-------|
 | **Frontend Framework** | Next.js 14+ (App Router) | Server components, static generation |
 | **Styling** | Tailwind CSS | Utility-first, dark mode support |
-| **State Management** | React Context + localStorage | Cart persistence |
-| **Forms** | React Hook Form (optional) | Or native form handling |
+| **State Management** | React useState | Simple form state, no cart needed |
+| **Validation** | Zod | Schema validation for forms |
 | **Hosting** | Vercel (free tier) | Automatic deployments |
 | **Backend** | AWS Lambda (Node.js 18) | Serverless functions |
-| **API Gateway** | AWS API Gateway (REST) | CORS configured |
+| **API Gateway** | AWS API Gateway (HTTP API) | CORS configured |
 | **Email** | AWS SES | Transactional emails |
-| **Database** | DynamoDB (optional) | Order history if needed |
 | **Version Control** | GitHub | CI/CD with Vercel |
 
 ---
@@ -266,13 +254,13 @@ public/
 
 ### Vercel (Frontend)
 ```bash
-# AWS API endpoint
-NEXT_PUBLIC_API_URL=https://xxxxxx.execute-api.us-east-1.amazonaws.com/prod
+# AWS API endpoint (no /prod suffix for HTTP API)
+NEXT_PUBLIC_API_URL=https://xxxxxx.execute-api.us-east-1.amazonaws.com
 
 # Site config
 NEXT_PUBLIC_SITE_NAME="IT Pro Direct - Telecom Equipment"
 NEXT_PUBLIC_CONTACT_EMAIL=nick@itprodirect.com
-NEXT_PUBLIC_PAYPAL_FEE_PERCENT=3
+NEXT_PUBLIC_LOCATION="Palm Harbor, FL"
 
 # Optional: Analytics
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
@@ -282,22 +270,21 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 ```bash
 # Email config
 OWNER_EMAIL=nick@itprodirect.com
-FROM_EMAIL=orders@itprodirect.com  # Must be verified in SES
+FROM_EMAIL=nick@itprodirect.com  # Must be verified in SES
 
-# Optional: DynamoDB
-ORDERS_TABLE_NAME=itprodirect-telecom-orders
+# Optional: Send customer confirmation (default: false in SES sandbox)
+SEND_CUSTOMER_EMAIL=false
 ```
 
 ---
 
 ## Security Considerations
 
-1. **CORS:** API Gateway configured to only accept requests from Vercel domain
-2. **Rate Limiting:** API Gateway throttling to prevent abuse
-3. **Input Validation:** Both client-side and Lambda-side validation
-4. **Honeypot Fields:** Hidden form fields to catch bots
-5. **No Sensitive Data in Frontend:** Payment details never stored, only method selected
-6. **SES Sandbox:** Start in sandbox mode, request production access when ready
+1. **CORS:** API Gateway configured with `Access-Control-Allow-Origin: *` (can restrict to Vercel domain in production)
+2. **Input Validation:** Both client-side (Zod) and Lambda-side validation
+3. **Honeypot Fields:** Hidden form fields to catch bots on contact form
+4. **No Sensitive Data:** No payment info collected online
+5. **SES Sandbox:** Customer emails optional until production access granted
 
 ---
 
@@ -305,10 +292,10 @@ ORDERS_TABLE_NAME=itprodirect-telecom-orders
 
 This is a low-volume liquidation site. Current architecture is intentionally simple:
 
-- **No database required initially** - Orders sent via email
+- **No database required** - Orders sent via email, owner tracks manually
 - **No user accounts** - Single seller, anonymous buyers
 - **No real-time inventory** - Manual updates to products.json
-- **No payment processing** - Wire/ACH/PayPal handled externally
+- **No payment processing** - Payments handled offline after contact
 
 If volume increases unexpectedly:
 1. Add DynamoDB for order tracking
