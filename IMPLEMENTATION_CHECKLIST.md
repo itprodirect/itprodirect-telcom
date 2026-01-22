@@ -1,7 +1,7 @@
 # Implementation Checklist - IT Pro Direct Telecom Equipment Site
 
 > **Last Updated:** January 22, 2026
-> **Status:** Phases 0-3 complete, Phase 4 in progress
+> **Status:** All phases complete - Site is LIVE
 
 ---
 
@@ -77,7 +77,7 @@
 
 ### 2.4 Product Detail Page
 - [x] **Create app/products/[sku]/page.tsx**
-- [x] **"Contact to Order" button** links to /contact (or will link to /checkout)
+- [x] **"Request to Order" button** links to /checkout with SKU param
 
 ### 2.5 About Page
 - [x] **Create app/about/page.tsx**
@@ -117,7 +117,7 @@
 - [x] **Add AWS API URL**
 
 ### 3.5 API Client
-- [x] **Create lib/api.ts** with submitContactForm and submitOrder
+- [x] **Create lib/api.ts** with submitContactForm and submitOrderRequest
 
 ### 3.6 Connect Contact Form
 - [x] **Create components/forms/ContactForm.tsx**
@@ -125,108 +125,117 @@
 
 ---
 
-## Phase 4: Order Request Page [IN PROGRESS]
+## Phase 4: Order Request Page [COMPLETE]
 
-This phase implements a simplified "order request" flow - no cart, no online payment.
+Simplified "order request" flow - no cart, no online payment. Owner contacts customer after submission.
 
 ### 4.1 Create Order Request Page
-- [ ] **Create app/checkout/page.tsx**
+- [x] **Create app/checkout/page.tsx**
   - Simple form: name, phone, email (optional)
-  - Product selection (from URL params or manual entry)
+  - Product selection from dropdown
   - Quantity selector
-  - Fulfillment preference (pickup recommended, shipping available)
+  - Fulfillment preference (pickup/shipping)
   - Notes field
   - Submit button
 
 ### 4.2 Order Request Form Component
-- [ ] **Create components/forms/OrderRequestForm.tsx**
-  - Form fields with validation (Zod)
+- [x] **Create components/forms/OrderRequestForm.tsx**
+  - Form fields with Zod validation
   - Submit to AWS /orders endpoint
-  - Loading state
-  - Success/error states
+  - Loading/success/error states
   - Display order ID on success
 
 ### 4.3 Update Validation Schema
-- [ ] **Update lib/validation.ts**
-  - Add orderRequestSchema (simplified)
-  - Remove complex payment schemas
+- [x] **Update lib/validation.ts**
+  - Added simplified orderRequestSchema
+  - Removed complex payment schemas
 
 ### 4.4 Update API Client
-- [ ] **Update lib/api.ts**
-  - Update submitOrder to use simplified payload
-  - Match AWS Lambda expected format
+- [x] **Update lib/api.ts**
+  - Added submitOrderRequest function
+  - Matches AWS Lambda expected format
 
 ### 4.5 Update Product Detail Page
-- [ ] **Update app/products/[sku]/page.tsx**
-  - "Contact to Order" button links to /checkout with product context
-  - Pass SKU, name, suggested quantity via URL params
+- [x] **Update app/products/[sku]/page.tsx**
+  - "Request to Order" button links to /checkout?sku=SKU
 
 ### 4.6 Update Header Navigation
-- [ ] **Update components/layout/Header.tsx**
-  - Change "Cart" button to "Order" or "Request Quote"
-  - Link to /checkout instead of showing cart count
+- [x] **Update components/layout/Header.tsx**
+  - Changed "Cart" to "Order" with clipboard icon
+  - Links to /checkout
 
 ### 4.7 Test Order Request Flow
-- [ ] **Test form validation**
-- [ ] **Submit test order request**
-- [ ] **Verify email received at nick@itprodirect.com**
-- [ ] **Verify success message displays with order ID**
-
-### 4.8 Commit Phase 4
-- [ ] **Commit progress**
-  ```bash
-  git add .
-  git commit -m "Phase 4: Order request page - simplified checkout flow"
-  git push
-  ```
+- [x] **Test form validation**
+- [x] **Submit test order request**
+- [x] **Verify email received**
+- [x] **Verify success message displays**
 
 ---
 
-## Phase 5: Polish & Deploy [PENDING]
+## Phase 5: Polish & Deploy [COMPLETE]
 
 ### 5.1 SEO Metadata
-- [ ] **Update app/layout.tsx metadata**
-- [ ] **Add metadata to each page**
+- [x] **Update app/layout.tsx metadata**
+- [x] **Add metadata to each page**
 
-### 5.2 Add Product Images
-- [ ] **Take photos of each product**
-- [ ] **Add to public/images/products/[sku]/**
-- [ ] **Update products.json if needed**
+### 5.2 Product Images
+- [x] **Process photos from phone** (strip EXIF, resize)
+- [x] **Remove sensitive images** (MAC addresses, personal info)
+- [x] **Created scripts/process-images.mjs** for image processing
+- [x] **Add to public/images/products/[sku]/**
+- [x] **Update products.json with image paths**
 
 ### 5.3 Final Content Review
-- [ ] **Review all product descriptions**
-- [ ] **Verify pricing is correct**
-- [ ] **Verify quantities match inventory**
+- [x] **Review all product descriptions**
+- [x] **Verify pricing is correct**
+- [x] **Verify quantities match inventory**
 
-### 5.4 Mobile Testing
-- [ ] **Test on real mobile device**
-- [ ] **Fix any responsive issues**
+### 5.4 Vercel Deployment
+- [x] **Deployment working** (connected to GitHub)
+- [x] **Environment variables set** in Vercel dashboard
 
-### 5.5 Performance Check
-- [ ] **Run Lighthouse audit**
-- [ ] **Optimize images if needed**
+### 5.5 Post-Deploy Testing
+- [x] **All pages load**
+- [x] **Contact form works**
+- [x] **Order request form works**
 
-### 5.6 Vercel Deployment
-- [ ] **Verify deployment is working** (already connected)
-- [ ] **Set environment variables in Vercel dashboard**
-  - NEXT_PUBLIC_API_URL
+---
 
-### 5.7 Post-Deploy Testing
-- [ ] **Test live site completely**
-  - All pages load
-  - Contact form works
-  - Order request form works
-  - Emails received
+## Phase 6: Marketing Landing Pages [COMPLETE]
 
-### 5.8 Final Commit
-- [ ] **Commit any final changes**
+Created specialized landing pages for Meta ad campaigns:
 
-### 5.9 Go Live!
-- [ ] **Site is live and ready for promotion**
+### 6.1 WISP/IT Pro Landing Page
+- [x] **Create app/lp/wisp/page.tsx**
+  - Dark theme (slate-900)
+  - Focus on bulk pricing
+  - Volume pricing table
+  - Targets WISP operators and IT pros
+
+### 6.2 Tampa Local Pickup Landing Page
+- [x] **Create app/lp/tampa/page.tsx**
+  - Green theme
+  - Focus on free local pickup, cash accepted
+  - Location info (Palm Harbor, FL)
+  - Targets local Tampa Bay buyers
+
+### 6.3 Liquidation/Deal Hunters Landing Page
+- [x] **Create app/lp/liquidation/page.tsx**
+  - Orange/red urgency theme
+  - Focus on limited stock, surplus pricing
+  - Stock counters per product
+  - Targets deal hunters and resellers
 
 ---
 
 ## Post-Launch Tasks
+
+### Marketing
+- [ ] Set up Meta ad campaigns targeting:
+  - `/lp/wisp` - IT/networking professionals
+  - `/lp/tampa` - Tampa Bay local buyers
+  - `/lp/liquidation` - Deal seekers, Facebook Marketplace users
+- [ ] Add UTM parameters for tracking
 
 ### Ongoing
 - [ ] Update inventory quantities as items sell
@@ -249,6 +258,9 @@ npm run dev              # Start dev server
 npm run build            # Production build
 npm run lint             # Run linter
 
+# Image Processing
+node scripts/process-images.mjs  # Process new product images
+
 # Git
 git status               # Check changes
 git add .                # Stage all changes
@@ -268,6 +280,9 @@ curl -X POST URL -H "Content-Type: application/json" -d '{...}'
 | Phase 0 | Complete | Setup done |
 | Phase 1 | Complete | Foundation built |
 | Phase 2 | Complete | Core pages working |
-| Phase 3 | Complete | AWS backend working, contact form working |
-| Phase 4 | In Progress | Need to create /checkout page |
-| Phase 5 | Pending | Polish and final deploy |
+| Phase 3 | Complete | AWS backend working |
+| Phase 4 | Complete | Order request flow working |
+| Phase 5 | Complete | Images processed, site deployed |
+| Phase 6 | Complete | 3 marketing landing pages ready |
+
+**Site is LIVE and ready for marketing campaigns!**
