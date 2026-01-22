@@ -35,9 +35,6 @@
         }
       ],
       "images": [
-        "/images/products/RocketM5-US/main.jpg",
-        "/images/products/RocketM5-US/boxes.jpg",
-        "/images/products/RocketM5-US/carton.jpg",
         "/images/products/RocketM5-US/bulk.jpg"
       ],
       "tags": ["airMAX", "RocketM5", "5GHz", "WISP", "PtMP", "PtP", "Ubiquiti", "radio"],
@@ -94,9 +91,7 @@
       "images": [
         "/images/products/RP-5AC-Gen2-US/main.jpg",
         "/images/products/RP-5AC-Gen2-US/front.jpg",
-        "/images/products/RP-5AC-Gen2-US/label.jpg",
-        "/images/products/RP-5AC-Gen2-US/boxes.jpg",
-        "/images/products/RP-5AC-Gen2-US/inventory.jpg"
+        "/images/products/RP-5AC-Gen2-US/side.jpg"
       ],
       "tags": ["Rocket Prism", "5AC Gen2", "RF filtering", "Ubiquiti", "airMAX", "radio"],
       "shipping": {
@@ -151,7 +146,6 @@
         }
       ],
       "images": [
-        "/images/products/am-5g20-90/main.jpg",
         "/images/products/am-5g20-90/box.jpg",
         "/images/products/am-5g20-90/unit.jpg"
       ],
@@ -209,7 +203,6 @@
       ],
       "images": [
         "/images/products/PBE-5AC-Gen2-US/main.jpg",
-        "/images/products/PBE-5AC-Gen2-US/label.jpg",
         "/images/products/PBE-5AC-Gen2-US/back.jpg"
       ],
       "tags": ["PowerBeam", "AC Gen2", "5GHz", "PtP", "backhaul", "Ubiquiti", "radio", "new"],
@@ -265,8 +258,7 @@
         }
       ],
       "images": [
-        "/images/products/MA-INJ-4/main.jpg",
-        "/images/products/MA-INJ-4/label.jpg"
+        "/images/products/MA-INJ-4/main.jpg"
       ],
       "tags": ["Meraki", "PoE injector", "802.3at", "MA-INJ-4", "Cisco", "accessory", "power"],
       "shipping": {
