@@ -35,9 +35,10 @@
         }
       ],
       "images": [
-        "/images/products/rocketm5/main.jpg",
-        "/images/products/rocketm5/side.jpg",
-        "/images/products/rocketm5/ports.jpg"
+        "/images/products/RocketM5-US/main.jpg",
+        "/images/products/RocketM5-US/boxes.jpg",
+        "/images/products/RocketM5-US/carton.jpg",
+        "/images/products/RocketM5-US/bulk.jpg"
       ],
       "tags": ["airMAX", "RocketM5", "5GHz", "WISP", "PtMP", "PtP", "Ubiquiti", "radio"],
       "shipping": {
@@ -91,8 +92,11 @@
         }
       ],
       "images": [
-        "/images/products/rocket-prism/main.jpg",
-        "/images/products/rocket-prism/detail.jpg"
+        "/images/products/RP-5AC-Gen2-US/main.jpg",
+        "/images/products/RP-5AC-Gen2-US/front.jpg",
+        "/images/products/RP-5AC-Gen2-US/label.jpg",
+        "/images/products/RP-5AC-Gen2-US/boxes.jpg",
+        "/images/products/RP-5AC-Gen2-US/inventory.jpg"
       ],
       "tags": ["Rocket Prism", "5AC Gen2", "RF filtering", "Ubiquiti", "airMAX", "radio"],
       "shipping": {
@@ -148,7 +152,8 @@
       ],
       "images": [
         "/images/products/am-5g20-90/main.jpg",
-        "/images/products/am-5g20-90/mounting.jpg"
+        "/images/products/am-5g20-90/box.jpg",
+        "/images/products/am-5g20-90/unit.jpg"
       ],
       "tags": ["airMAX", "Sector Antenna", "90 degree", "5GHz", "WISP", "Ubiquiti", "antenna"],
       "shipping": {
@@ -203,8 +208,9 @@
         }
       ],
       "images": [
-        "/images/products/powerbeam/main.jpg",
-        "/images/products/powerbeam/box.jpg"
+        "/images/products/PBE-5AC-Gen2-US/main.jpg",
+        "/images/products/PBE-5AC-Gen2-US/label.jpg",
+        "/images/products/PBE-5AC-Gen2-US/back.jpg"
       ],
       "tags": ["PowerBeam", "AC Gen2", "5GHz", "PtP", "backhaul", "Ubiquiti", "radio", "new"],
       "shipping": {
@@ -259,7 +265,8 @@
         }
       ],
       "images": [
-        "/images/products/meraki-poe/main.jpg"
+        "/images/products/MA-INJ-4/main.jpg",
+        "/images/products/MA-INJ-4/label.jpg"
       ],
       "tags": ["Meraki", "PoE injector", "802.3at", "MA-INJ-4", "Cisco", "accessory", "power"],
       "shipping": {
@@ -280,9 +287,8 @@
     }
   ],
   "meta": {
-    "lastUpdated": "2026-01-20",
+    "lastUpdated": "2026-01-22",
     "currency": "USD",
-    "paypalFeePercent": 3,
     "location": "Palm Harbor, FL",
     "contactEmail": "nick@itprodirect.com"
   }

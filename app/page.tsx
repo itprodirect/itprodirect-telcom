@@ -1,9 +1,16 @@
 import Link from "next/link";
+import { Metadata } from "next";
 import { getFeaturedProducts } from "@/lib/products";
 import { formatCurrency } from "@/lib/pricing";
 import { Button } from "@/components/ui/Button";
 import { Badge, ConditionBadge } from "@/components/ui/Badge";
 import { ProductImage } from "@/components/ui/ProductImage";
+
+export const metadata: Metadata = {
+  title: "Surplus Telecom Equipment | Ubiquiti & Meraki",
+  description:
+    "Quality tested Ubiquiti airMAX radios, sector antennas, and Cisco Meraki PoE injectors. Surplus telecom equipment in Tampa Bay. Local pickup in Palm Harbor, FL.",
+};
 
 export default function Home() {
   const featuredProducts = getFeaturedProducts();

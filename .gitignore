@@ -52,3 +52,8 @@ __pycache__/
 lambda/**/*.zip
 lambda/**/node_modules/
 lambda/**/package-lock.json
+
+# Original/sensitive assets (processed images are in public/)
+assets/original/
+assets/sensitive/
+assets/*.zip

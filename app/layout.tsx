@@ -11,18 +11,46 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "IT Pro Direct | Surplus Telecom Equipment",
+  title: {
+    default: "IT Pro Direct | Surplus Telecom Equipment",
+    template: "%s | IT Pro Direct",
+  },
   description:
-    "Quality tested Ubiquiti and Cisco Meraki networking gear. Tampa Bay area. Wire/ACH/PayPal accepted. Local pickup available.",
+    "Quality tested Ubiquiti airMAX and Cisco Meraki networking equipment. Surplus telecom gear in Tampa Bay area. Local pickup in Palm Harbor, FL. Wire/ACH/PayPal accepted.",
   keywords: [
     "Ubiquiti",
     "Meraki",
-    "WISP",
+    "WISP equipment",
     "airMAX",
+    "RocketM5",
+    "Rocket Prism",
+    "PowerBeam",
+    "sector antenna",
     "networking",
     "Tampa Bay",
+    "Palm Harbor FL",
     "telecom equipment",
+    "surplus networking",
   ],
+  authors: [{ name: "IT Pro Direct" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "IT Pro Direct",
+    title: "IT Pro Direct | Surplus Telecom Equipment",
+    description:
+      "Quality tested Ubiquiti airMAX and Cisco Meraki networking equipment. Local pickup in Palm Harbor, FL.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IT Pro Direct | Surplus Telecom Equipment",
+    description:
+      "Quality tested Ubiquiti airMAX and Cisco Meraki networking equipment. Local pickup in Palm Harbor, FL.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
